@@ -21,12 +21,12 @@ API RESTful desenvolvida em **Java 17** com **Spring Boot** e **JPA**, conectada
 - Spring Cache
 ```
 
-1. Clone o repositório
+### 1. Clone o repositório
 ```text
 git clone https://github.com/Irissuu/challengeJava1.git
 ```
 
-2. Configure o application.properties
+### 2. Configure o application.properties, coloque suas credenciais em SEU_USUARIO e SUA_SENHA
 ```text
 spring.datasource.url=jdbc:oracle:thin:@//oracle.fiap.com.br:1521/ORCL
 spring.datasource.username=SEU_USUARIO
@@ -38,7 +38,7 @@ spring.jpa.show-sql=true
 spring.jpa.hibernate.ddl-auto=create-drop 
 ```
 
-3. Execute o projeto
+### 3. Execute o projeto
 ```text
 ./gradlew bootRun
 ```
