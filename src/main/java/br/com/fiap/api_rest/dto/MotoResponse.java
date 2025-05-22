@@ -1,6 +1,5 @@
 package br.com.fiap.api_rest.dto;
 
-
 public class MotoResponse {
 
     private Long id;
@@ -9,21 +8,14 @@ public class MotoResponse {
     private String modelo;
     private int ano;
 
+    public MotoResponse() { }
 
-
-    public void Moto(Long id, String placa, String marca, String modelo, int ano ) {
+    public MotoResponse(Long id, String placa, String marca, String modelo, int ano) {
         this.id = id;
         this.placa = placa;
         this.marca = marca;
         this.modelo = modelo;
         this.ano = ano;
-    }
-
-    public void Moto() {
-
-    }
-
-    public MotoResponse(Long id, String placa, String marca, String modelo, int ano) {
     }
 
     public Long getId() {

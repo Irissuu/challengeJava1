@@ -41,7 +41,7 @@ public class VagaController {
     @Operation(summary = "Lista todas as vagas")
     @GetMapping
     public ResponseEntity<Page<VagaResponse>> readVagas(@RequestParam(defaultValue = "0") Integer pageNumber) {
-        Pageable pageable = PageRequest.of(pageNumber, 10, Sort.by("nome").ascending());
+        Pageable pageable = PageRequest.of(pageNumber, 10, Sort.by("numero").ascending());
         Page<VagaJava> vagasPage = vagaService.readVagas(pageable);
         Page<VagaResponse> vagaResponses = vagasPage.map(vagaMapper::vagaToResponse);
         return new ResponseEntity<>(vagaResponses, HttpStatus.OK);
