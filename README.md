@@ -27,15 +27,20 @@ git clone https://github.com/Irissuu/challengeJava1.git
 ```
 
 ### 2. Configure o application.properties, coloque suas credenciais em SEU_USUARIO e SUA_SENHA
-```text
+```properties
+spring.application.name=2tdspm-api-elysia
+api.security.token.secret=my-secret-key
+
 spring.datasource.url=jdbc:oracle:thin:@//oracle.fiap.com.br:1521/ORCL
-spring.datasource.username=SEU_USUARIO
-spring.datasource.password=SUA_SENHA
+                          # Coloque suas crendeicias aqui
+spring.datasource.username=SEU_USUARIO_AQUI
+spring.datasource.password=SUA_SENHA_AQUI
 spring.datasource.driver-class-name=oracle.jdbc.OracleDriver
 
 spring.jpa.database-platform=org.hibernate.dialect.OracleDialect
 spring.jpa.show-sql=true
-spring.jpa.hibernate.ddl-auto=create-drop 
+spring.jpa.generate-ddl=true
+spring.jpa.hibernate.ddl-auto=create-drop
 ```
 
 ### 3. Execute o projeto
