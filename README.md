@@ -59,6 +59,7 @@ spring.jpa.hibernate.ddl-auto=create-drop
 - Docker
 - Dockerfile  
 - Oracle XE
+- Java 17
 - Gradle
 - Azure CLI
 
