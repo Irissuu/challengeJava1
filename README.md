@@ -12,7 +12,6 @@ API RESTful desenvolvida em **Java 17** com **Spring Boot** e **JPA**, conectada
 
 ## ⚙️ Tecnologias
 
-```text
 - Java 17
 - Spring Boot 
 - Spring Data JPA
@@ -20,7 +19,7 @@ API RESTful desenvolvida em **Java 17** com **Spring Boot** e **JPA**, conectada
 - Spring Validation (Bean Validation)
 - Swagger / OpenAPI 
 - Spring Cache
-```
+
 
 ### 1. Clone o repositório
 ```text
@@ -57,13 +56,11 @@ spring.jpa.hibernate.ddl-auto=create-drop
 
 ## ⚙️ Tecnologias
 
-```text
 - Docker
 - Dockerfile  
 - Oracle XE
 - Gradle
 - Azure CLI
-```
 
 <h2> Pré-requisitos para VM (Debian) <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/debian/debian-original.svg" width="27"/> </h2>
 
@@ -149,7 +146,7 @@ docker exec -it oracle-db bash
 ```text
 sqlplus system/orclvk3@localhost:1521/XEPDB1
 ```
-<p >Utilize `SELECT * FROM MOTO_JAVA;` `SELECT * FROM VAGA_JAVA;` para verificar</p>
+<p> Utilize `SELECT * FROM MOTO_JAVA;` `SELECT * FROM VAGA_JAVA;` para verificar</p>
 
 - ### 6. (Opcional) Segurança
 <p> Adicione isso ao .gitignore para não subir tokens: </p>
