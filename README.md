@@ -67,7 +67,7 @@ spring.jpa.hibernate.ddl-auto=create-drop
 
 - Docker: `sudo apt install docker.io -y`
 - Java 17: `sudo apt install openjdk-17-jdk -y`
-- Use o Docker sem _sudo_: `sudo usermod -aG docker elysia`
+- Use o Docker sem _sudo_: `sudo usermod -aG docker <user>`
 - O projeto já possui _Gradle_ [instalar o Gradle manualmente](#como-instalar-o-gradle)
 
 #
@@ -135,7 +135,7 @@ docker run -d --name oracle-db \
 
 ### 4. Acessar pelo Swagger
 ```text
-http://<IP da VM>:8080/swagger-ui/index.html
+http://<IP_VM>:8080/swagger-ui/index.html
 ```
 
 
