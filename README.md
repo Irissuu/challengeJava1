@@ -167,5 +167,4 @@ echo ".docker/" >> .gitignore
 > sudo unzip -d /opt/gradle /tmp/gradle-8.5-bin.zip
 > echo 'export PATH=$PATH:/opt/gradle/gradle-8.5/bin' >> ~/.bashrc
 > source ~/.bashrc
-> gradle -v
 > ```
