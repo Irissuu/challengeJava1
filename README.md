@@ -62,6 +62,7 @@ spring.jpa.hibernate.ddl-auto=create-drop
 - Java 17
 - Gradle
 - Azure CLI
+- Swagger
 
 <h2> Pré-requisitos para VM (Debian) <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/debian/debian-original.svg" width="27"/> </h2>
 
