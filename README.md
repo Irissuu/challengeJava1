@@ -32,7 +32,7 @@ spring.application.name=2tdspm-api-elysia
 api.security.token.secret=my-secret-key
 
 spring.datasource.url=jdbc:oracle:thin:@//oracle.fiap.com.br:1521/ORCL
-                          # Coloque suas crendeicias aqui
+                          # Coloque suas crendenciais aqui
 spring.datasource.username=SEU_USUARIO_AQUI
 spring.datasource.password=SUA_SENHA_AQUI
 spring.datasource.driver-class-name=oracle.jdbc.OracleDriver
