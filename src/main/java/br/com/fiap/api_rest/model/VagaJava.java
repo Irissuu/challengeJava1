@@ -37,7 +37,6 @@ public class VagaJava {
         this.motos = new ArrayList<>();
     }
 
-
     public VagaJava() {
     }
 

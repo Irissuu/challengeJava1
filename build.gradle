@@ -3,7 +3,6 @@ plugins {
 	id 'application'
 	id 'org.springframework.boot' version '3.4.4'
 	id 'io.spring.dependency-management' version '1.1.7'
-
 }
 
 group = 'br.com.fiap'
@@ -20,16 +19,19 @@ repositories {
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
-	implementation 'org.springframework.boot:spring-boot-starter-hateoas'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-cache'
+	implementation 'org.springframework.boot:spring-boot-starter-hateoas'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.5'
-	implementation 'com.oracle.database.jdbc:ojdbc11'
-	implementation 'com.oracle.database.jdbc:ojdbc11:23.3.0.23.09'
-	// runtimeOnly 'com.h2database:h2'
+	implementation 'com.auth0:java-jwt:4.4.0'
+	runtimeOnly 'com.oracle.database.jdbc:ojdbc11:23.3.0.23.09'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.security:spring-security-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
