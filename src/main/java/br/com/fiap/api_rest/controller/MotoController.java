@@ -1,7 +1,7 @@
 package br.com.fiap.api_rest.controller;
 
-import br.com.fiap.api_rest.dto.MotoRequest;
-import br.com.fiap.api_rest.dto.MotoResponse;
+import br.com.fiap.api_rest.dto.Request.MotoRequest;
+import br.com.fiap.api_rest.dto.Response.MotoResponse;
 import br.com.fiap.api_rest.mapper.MotoMapper;
 import br.com.fiap.api_rest.model.MotoJava;
 import br.com.fiap.api_rest.service.MotoService;

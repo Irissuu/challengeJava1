@@ -1,7 +1,7 @@
 package br.com.fiap.api_rest.controller;
 
-import br.com.fiap.api_rest.dto.UsuarioRequest;
-import br.com.fiap.api_rest.dto.UsuarioResponse;
+import br.com.fiap.api_rest.dto.Request.UsuarioRequest;
+import br.com.fiap.api_rest.dto.Response.UsuarioResponse;
 import br.com.fiap.api_rest.mapper.UsuarioMapper;
 import br.com.fiap.api_rest.model.UsuarioJava;
 import br.com.fiap.api_rest.service.UsuarioService;

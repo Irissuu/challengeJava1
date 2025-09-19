@@ -1,7 +1,7 @@
 package br.com.fiap.api_rest.controller;
 
-import br.com.fiap.api_rest.dto.VagaRequest;
-import br.com.fiap.api_rest.dto.VagaResponse;
+import br.com.fiap.api_rest.dto.Request.VagaRequest;
+import br.com.fiap.api_rest.dto.Response.VagaResponse;
 import br.com.fiap.api_rest.mapper.VagaMapper;
 import br.com.fiap.api_rest.model.VagaJava;
 import br.com.fiap.api_rest.service.VagaService;

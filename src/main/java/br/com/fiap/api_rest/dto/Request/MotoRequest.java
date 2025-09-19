@@ -1,8 +1,5 @@
-package br.com.fiap.api_rest.dto;
+package br.com.fiap.api_rest.dto.Request;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.validation.constraints.*;
 
 public class MotoRequest {

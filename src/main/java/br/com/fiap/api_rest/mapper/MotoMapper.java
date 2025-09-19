@@ -1,9 +1,9 @@
 package br.com.fiap.api_rest.mapper;
 
 import br.com.fiap.api_rest.controller.MotoController;
-import br.com.fiap.api_rest.dto.MotoRequest;
-import br.com.fiap.api_rest.dto.MotoResponse;
-import br.com.fiap.api_rest.dto.MotoResponseDTO;
+import br.com.fiap.api_rest.dto.Request.MotoRequest;
+import br.com.fiap.api_rest.dto.Response.MotoResponse;
+import br.com.fiap.api_rest.dto.Response.MotoResponseDTO;
 import br.com.fiap.api_rest.model.MotoJava;
 import org.springframework.hateoas.Link;
 

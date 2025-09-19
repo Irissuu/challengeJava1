@@ -1,4 +1,4 @@
-package br.com.fiap.api_rest.dto;
+package br.com.fiap.api_rest.dto.Response;
 
 import org.springframework.hateoas.Link;
 
