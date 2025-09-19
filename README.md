@@ -8,7 +8,6 @@ API RESTful desenvolvida em **Java 17** com **Spring Boot** e **JPA**, conectada
 - Taís Tavares Alves 557553 </br>
 
 ---
-<img alt="Java Advanced" src="https://img.shields.io/badge/Java%20Advanced-white?style=for-the-badge">
 
 ## ⚙️ Tecnologias
 
@@ -19,6 +18,9 @@ API RESTful desenvolvida em **Java 17** com **Spring Boot** e **JPA**, conectada
 - Spring Validation (Bean Validation)
 - Swagger / OpenAPI 
 - Spring Cache
+- Spring Security
+- Thymeleaf
+- Flyway 
 
 
 ### 1. Clone o repositório
