@@ -1,4 +1,4 @@
-package br.com.fiap.api_rest.security;
+package br.com.fiap.api_rest.service;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;

@@ -4,7 +4,6 @@ import br.com.fiap.api_rest.model.UsuarioJava;
 import br.com.fiap.api_rest.repository.UsuarioRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -13,6 +12,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -22,15 +22,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    private final JwtAuthFilter jwtFilter;
-
-    public SecurityConfig(JwtAuthFilter jwtFilter) { this.jwtFilter = jwtFilter; }
-
     @Bean
     public UserDetailsService userDetailsService(UsuarioRepository repo) {
         return username -> {
             UsuarioJava u = repo.findByEmail(username);
-            if (u == null) throw new RuntimeException("Usuário não encontrado");
+            if (u == null) throw new UsernameNotFoundException("Usuário não encontrado");
             return User.withUsername(u.getEmail())
                     .password(u.getSenha())
                     .roles(u.getRole().name())
@@ -42,7 +38,7 @@ public class SecurityConfig {
 
     @Bean
     public DaoAuthenticationProvider authProvider(UserDetailsService uds, PasswordEncoder enc) {
-        DaoAuthenticationProvider p = new DaoAuthenticationProvider();
+        var p = new DaoAuthenticationProvider();
         p.setUserDetailsService(uds);
         p.setPasswordEncoder(enc);
         return p;
@@ -54,22 +50,29 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http, JwtAuthFilter jwtFilter) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
 
-                        .requestMatchers("/auth/**",
-                                "/v3/api-docs/**","/swagger-ui/**","/swagger-ui.html").permitAll()
+                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+                        .requestMatchers("/auth/register", "/auth/login", "/auth/logout").permitAll()
 
 
-                        .requestMatchers("/usuarios/**").hasAnyRole("USER","ADMIN")
+                        .requestMatchers("/usuarios/**").hasAnyRole("GERENCIA_VAGA","GERENCIA_MOTO")
 
 
-                        .anyRequest().hasRole("ADMIN")
+                        .requestMatchers("/vagas/**").hasRole("GERENCIA_VAGA")
+
+
+                        .requestMatchers("/motos/**").hasRole("GERENCIA_MOTO")
+
+
+                        .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+
         return http.build();
     }
 }

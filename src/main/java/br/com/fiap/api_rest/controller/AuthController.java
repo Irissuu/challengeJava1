@@ -1,80 +1,100 @@
 package br.com.fiap.api_rest.controller;
 
 import br.com.fiap.api_rest.dto.Request.AuthRequest;
-import br.com.fiap.api_rest.dto.Response.AuthResponse;
 import br.com.fiap.api_rest.dto.Request.RegisterRequest;
-import br.com.fiap.api_rest.model.UserRole;
+import br.com.fiap.api_rest.dto.Response.UsuarioResponse;
 import br.com.fiap.api_rest.model.UsuarioJava;
-import br.com.fiap.api_rest.repository.UsuarioRepository;
-import br.com.fiap.api_rest.security.TokenService;
+import br.com.fiap.api_rest.service.TokenService;
+import br.com.fiap.api_rest.service.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
+import java.net.URI;
 
 @RestController
 @RequestMapping("/auth")
-@Tag(name = "Autenticação")
 public class AuthController {
 
     private final AuthenticationManager authManager;
     private final TokenService tokenService;
-    private final UsuarioRepository repo;
-    private final PasswordEncoder encoder;
+    private final UsuarioService usuarioService;
 
-    public AuthController(AuthenticationManager authManager, TokenService tokenService,
-                          UsuarioRepository repo, PasswordEncoder encoder) {
+    public AuthController(AuthenticationManager authManager,
+                          TokenService tokenService,
+                          UsuarioService usuarioService) {
         this.authManager = authManager;
         this.tokenService = tokenService;
-        this.repo = repo;
-        this.encoder = encoder;
+        this.usuarioService = usuarioService;
     }
 
+    @Operation(summary = "Cadastra um usuário com a função GERENCIA_VAGA ou GERENCIA_MOTO")
     @PostMapping("/register")
-    @Operation(summary = "Registrar usuário (BCrypt). Role padrão: USER")
-    public ResponseEntity<?> register(@RequestBody RegisterRequest req) {
-        if (repo.existsByEmail(req.getEmail())) {
-            return ResponseEntity.badRequest().body(Map.of("error","E-mail já cadastrado"));
+    public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest req) {
+        if (req.role() == null) {
+            return ResponseEntity.badRequest().body("Informe o role: GERENCIA_VAGA ou GERENCIA_MOTO.");
         }
-        UsuarioJava u = new UsuarioJava();
-        u.setNome(req.getNome());
-        u.setEmail(req.getEmail());
-        u.setSenha(encoder.encode(req.getSenha()));      // BCrypt
-        u.setRole(req.getRole() == null ? UserRole.USER : req.getRole());
-        repo.save(u);
-
-        return ResponseEntity.ok(Map.of(
-                "id", u.getId(),
-                "nome", u.getNome(),
-                "email", u.getEmail(),
-                "role", u.getRole()
-        ));
+        try {
+            UsuarioJava saved = usuarioService.create(req.nome(), req.email(), req.senha(), req.role());
+            UsuarioResponse body = new UsuarioResponse(saved.getId(), saved.getNome(), saved.getEmail());
+            return ResponseEntity.created(URI.create("/usuarios/" + saved.getId())).body(body);
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(409).body(e.getMessage());
+        }
     }
 
+    @Operation(summary = "Realiza login")
     @PostMapping("/login")
-    @Operation(summary = "Login — retorna JWT Bearer")
-    public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest req) {
+    public ResponseEntity<String> login(@RequestBody AuthRequest body) {
         Authentication auth = authManager.authenticate(
-                new UsernamePasswordAuthenticationToken(req.getEmail(), req.getSenha())
-        );
-        String token = tokenService.generate((User) auth.getPrincipal());
-        return ResponseEntity.ok(AuthResponse.bearer(token));
+                new UsernamePasswordAuthenticationToken(body.email(), body.senha()));
+        String jwt = tokenService.generate((UserDetails) auth.getPrincipal());
+        return ResponseEntity.ok()
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwt)
+                .body(jwt);
     }
 
+    @Operation(summary = "Realiza logout")
     @PostMapping("/logout")
-    @Operation(summary = "Logout — revoga o token atual (Authorization: Bearer <token>)")
-    public ResponseEntity<Void> logout(@RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization) {
-        if (authorization != null && authorization.startsWith("Bearer ")) {
-            tokenService.revoke(authorization.substring(7));
+    public ResponseEntity<?> logout(
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization) {
+        if (authorization == null || !authorization.startsWith("Bearer ")) {
+            return ResponseEntity.badRequest()
+                    .body(java.util.Map.of("error", "Authorization header ausente ou inválido (use: Bearer <token>)."));
         }
-        return ResponseEntity.noContent().build();
+
+        String token = authorization.substring(7).trim();
+        if (token.isEmpty()) {
+            return ResponseEntity.badRequest()
+                    .body(java.util.Map.of("error", "Token não informado."));
+        }
+
+        try {
+            tokenService.getSubject(token);
+
+            tokenService.revoke(token);
+
+            return ResponseEntity.ok(java.util.Map.of("message", "Logout realizado com sucesso."));
+        } catch (Exception ex) {
+            return ResponseEntity.status(org.springframework.http.HttpStatus.UNAUTHORIZED)
+                    .body(java.util.Map.of("error", "Token inválido ou expirado."));
+        }
     }
+
+@GetMapping("/me")
+public ResponseEntity<?> me(Authentication auth) {
+    if (auth == null) return ResponseEntity.status(401).build();
+    var user = auth.getName();
+    var roles = auth.getAuthorities().stream().map(a -> a.getAuthority()).toList();
+    return ResponseEntity.ok(new java.util.HashMap<>() {{
+        put("email", user);
+        put("roles", roles);
+    }});
+}
 }

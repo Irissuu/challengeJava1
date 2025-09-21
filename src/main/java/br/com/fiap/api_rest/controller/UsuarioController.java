@@ -30,17 +30,13 @@ public class UsuarioController {
         this.usuarioService = usuarioService;
     }
 
-    @Operation(summary = "Cadastra um usuário")
-    @PostMapping
-    public ResponseEntity<UsuarioResponse> createUsuario(@Valid @RequestBody UsuarioRequest request) {
-        UsuarioJava usuario = usuarioMapper.requestToUsuario(request);
-        UsuarioJava salvo = usuarioService.createUsuario(usuario);
-        return new ResponseEntity<>(usuarioMapper.usuarioToResponse(salvo), HttpStatus.CREATED);
-    }
+
 
     @Operation(summary = "Lista todos os usuários")
     @GetMapping
-    public ResponseEntity<Page<UsuarioResponse>> readUsuarios(@RequestParam(defaultValue = "0") Integer pageNumber) {
+    public ResponseEntity<Page<UsuarioResponse>> readUsuarios(
+            @RequestParam(defaultValue = "0") Integer pageNumber) {
+
         Pageable pageable = PageRequest.of(pageNumber, 10, Sort.by("nome").ascending());
         Page<UsuarioJava> usuariosPage = usuarioService.readUsuarios(pageable);
         Page<UsuarioResponse> responses = usuariosPage.map(usuarioMapper::usuarioToResponse);
@@ -51,19 +47,21 @@ public class UsuarioController {
     @GetMapping("/{id}")
     public ResponseEntity<UsuarioResponse> readUsuario(@PathVariable Long id) {
         UsuarioJava usuario = usuarioService.readUsuarioById(id);
-        return usuario != null ?
-                new ResponseEntity<>(usuarioMapper.usuarioToResponse(usuario), HttpStatus.OK) :
-                new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return (usuario != null)
+                ? new ResponseEntity<>(usuarioMapper.usuarioToResponse(usuario), HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @Operation(summary = "Atualiza um usuário existente")
     @PutMapping("/{id}")
-    public ResponseEntity<UsuarioResponse> updateUsuario(@PathVariable Long id, @Valid @RequestBody UsuarioRequest request) {
+    public ResponseEntity<UsuarioResponse> updateUsuario(
+            @PathVariable Long id, @Valid @RequestBody UsuarioRequest request) {
+
         UsuarioJava atualizado = usuarioMapper.requestToUsuario(request);
         UsuarioJava salvo = usuarioService.updateUsuario(id, atualizado);
-        return salvo != null ?
-                new ResponseEntity<>(usuarioMapper.usuarioToResponse(salvo), HttpStatus.OK) :
-                new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return (salvo != null)
+                ? new ResponseEntity<>(usuarioMapper.usuarioToResponse(salvo), HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     @Operation(summary = "Exclui um usuário por ID")

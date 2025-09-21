@@ -6,15 +6,16 @@ import br.com.fiap.api_rest.model.UsuarioJava;
 
 public class UsuarioMapper {
 
+
     public UsuarioJava requestToUsuario(UsuarioRequest request) {
-        return new UsuarioJava(
-                null,
-                request.nome(),
-                request.email(),
-                request.senha()
-        );
+        UsuarioJava u = new UsuarioJava();
+        u.setNome(request.nome());
+        u.setEmail(request.email());
+        u.setSenha(request.senha());
+        return u;
     }
 
+    /** Monta a resposta sem expor a senha. */
     public UsuarioResponse usuarioToResponse(UsuarioJava usuario) {
         return new UsuarioResponse(
                 usuario.getId(),
