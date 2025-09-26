@@ -19,10 +19,9 @@ public class UsuarioJava {
     private String senha;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "role")               // armazena "GERENCIA_VAGA" ou "GERENCIA_MOTO"
-    private UserRole role;               // <-- sem default!
+    @Column(name = "role")
+    private UserRole role;
 
-    // getters e setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

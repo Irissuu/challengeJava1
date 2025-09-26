@@ -30,8 +30,6 @@ public class UsuarioController {
         this.usuarioService = usuarioService;
     }
 
-
-
     @Operation(summary = "Lista todos os usuários")
     @GetMapping
     public ResponseEntity<Page<UsuarioResponse>> readUsuarios(

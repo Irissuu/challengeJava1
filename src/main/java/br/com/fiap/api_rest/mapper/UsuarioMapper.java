@@ -15,7 +15,6 @@ public class UsuarioMapper {
         return u;
     }
 
-    /** Monta a resposta sem expor a senha. */
     public UsuarioResponse usuarioToResponse(UsuarioJava usuario) {
         return new UsuarioResponse(
                 usuario.getId(),
