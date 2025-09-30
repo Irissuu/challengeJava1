@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Motos – Formulário</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <script defer th:src="@{/js/script.js}"></script>
+</head>
+<body>
+<main class="container">
+    <h2>Moto</h2>
+
+    <form id="moto-form" onsubmit="submitMoto(event)">
+        <input id="moto-id" type="hidden"/>
+
+        <div class="form-row">
+            <div>
+                <label for="moto-placa">Placa</label>
+                <input id="moto-placa" class="input" required
+                       minlength="7" maxlength="7" placeholder="ABC1D23"/>
+                <small class="hint-muted">A placa deve ter exatamente 7 caracteres.</small>
+            </div>
+
+            <div>
+                <label for="moto-marca">Marca</label>
+                <input id="moto-marca" class="input" required placeholder="Honda"/>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div>
+                <label for="moto-modelo">Modelo</label>
+                <input id="moto-modelo" class="input" required placeholder="CG 160"/>
+            </div>
+
+            <div>
+                <label for="moto-ano">Ano</label>
+                <input id="moto-ano" class="input" type="number" required min="1990" max="2100" placeholder="2022"/>
+            </div>
+        </div>
+
+        <div class="stack-14"></div>
+        <button class="btn btn-primary" type="submit">Salvar</button>
+        <a class="btn btn-ghost ml-8" th:href="@{/motos/list}">Cancelar</a>
+    </form>
+</main>
+</body>
+</html>

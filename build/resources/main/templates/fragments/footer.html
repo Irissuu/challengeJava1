@@ -1,0 +1,8 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<body th:fragment="footer">
+<div class="footer">
+    © <span th:text="${#dates.format(#dates.createNow(),'yyyy')}"></span> Mottu • Elysia
+</div>
+</body>
+</html>

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Acesso negado</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<div th:insert="fragments/header :: header"></div>
+<main class="container">
+    <div class="card">
+        <h2>Acesso negado</h2>
+        <p>Você não pode gerenciar Vagas, mas pode visualizar a lista:</p>
+        <a class="btn" href="/ver/vagas">Ver Vagas</a>
+    </div>
+</main>
+<div th:insert="fragments/footer :: footer"></div>
+</body>
+</html>

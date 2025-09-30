@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Ver Motos</title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <script defer th:src="@{/js/view.js}"></script>
+
+    <style>
+        #table-motos thead th:nth-child(n+5),
+        #table-motos tbody td:nth-child(n+5) { display: none !important; }
+    </style>
+
+    <script defer th:src="@{/js/view.js}"></script>
+</head>
+<body data-page="ver-motos">
+<div th:insert="fragments/header :: header"></div>
+
+<main class="container">
+    <div class="card">
+        <h2 style="margin:0;">Motos (somente leitura)</h2>
+
+        <div style="display:flex;gap:8px;align-items:center;margin:12px 0;">
+            <input id="moto-id" type="number" min="1" placeholder="Buscar por ID" />
+            <button class="btn" id="btn-buscar-moto">Buscar</button>
+            <button class="btn btn-secondary" id="btn-limpar-moto">Limpar</button>
+        </div>
+
+        <table class="table" id="table-motos">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Placa</th>
+                <th>Modelo</th>
+                <th>Ano</th>
+            </tr>
+            </thead>
+            <tbody id="tbody-motos"></tbody>
+        </table>
+    </div>
+</main>
+
+<div th:insert="fragments/footer :: footer"></div>
+</body>
+</html>

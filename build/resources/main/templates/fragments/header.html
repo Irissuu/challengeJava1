@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<body th:fragment="header">
+<nav class="navbar">
+    <div class="inner">
+        <div class="brand">
+            <span class="dot"></span>
+            <span>Mottu • Elysia</span>
+        </div>
+        <div class="navlinks">
+            <a th:href="@{/home}"       th:classappend="${page}=='home' ? ' active' : ''">Home</a>
+            <a th:href="@{/motos/list}" th:classappend="${page}=='motos' ? ' active' : ''">Motos</a>
+            <a th:href="@{/vagas/list}" th:classappend="${page}=='vagas' ? ' active' : ''">Vagas</a>
+            <a th:href="@{/perfil}"     th:classappend="${page}=='perfil' ? ' active' : ''">Meu Perfil</a>
+            <a class="btn btn-ghost" href="javascript:void(0)" onclick="doLogout()">Sair</a>
+        </div>
+        <div id="user-badge"></div>
+    </div>
+</nav>
+
+<script th:if="${page} != 'perfil'" defer th:src="@{/js/script.js}"></script>
+
+<script>
+    if (typeof window.doLogout !== "function") {
+        window.doLogout = function () {
+            fetch("/auth/logout", { method: "POST", credentials: "include" })
+                .finally(() => location.href = "/login");
+        };
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        if (typeof window.loadUserBadge === "function") {
+            window.loadUserBadge();
+        }
+    });
+</script>
+</body>
+</html>

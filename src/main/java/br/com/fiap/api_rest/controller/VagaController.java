@@ -1,8 +1,11 @@
 package br.com.fiap.api_rest.controller;
 
 import br.com.fiap.api_rest.dto.Request.VagaRequest;
+import br.com.fiap.api_rest.dto.Response.MotoResponse;
 import br.com.fiap.api_rest.dto.Response.VagaResponse;
 import br.com.fiap.api_rest.mapper.VagaMapper;
+import br.com.fiap.api_rest.mapper.MotoMapper;
+import br.com.fiap.api_rest.service.MotoService;
 import br.com.fiap.api_rest.model.VagaJava;
 import br.com.fiap.api_rest.service.VagaService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -17,17 +20,22 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(value = "/vagas")
 @Tag(name = "api-vagas-java")
 public class VagaController {
 
     private final VagaService vagaService;
+    private final MotoService motoService;
     private final VagaMapper vagaMapper = new VagaMapper();
+    private final MotoMapper motoMapper = new MotoMapper();
 
     @Autowired
-    public VagaController(VagaService vagaService) {
+    public VagaController(VagaService vagaService, MotoService motoService) {
         this.vagaService = vagaService;
+        this.motoService = motoService;
     }
 
     @Operation(summary = "Cadastra uma vaga")
@@ -75,5 +83,44 @@ public class VagaController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @Operation(summary = "Lista as motos relacionadas a uma vaga")
+    @GetMapping("/{vagaId}/motos")
+    public ResponseEntity<List<MotoResponse>> listarMotosDaVaga(@PathVariable Long vagaId) {
+        VagaJava vaga = vagaService.readVagaById(vagaId);
+        if (vaga == null) return ResponseEntity.notFound().build();
+        List<MotoResponse> motos = vaga.getMotos().stream()
+                .map(motoMapper::motoToResponse)
+                .toList();
+        return ResponseEntity.ok(motos);
+    }
+
+    @Operation(summary = "Relaciona uma moto a uma vaga")
+    @PutMapping("/{vagaId}/motos/{motoId}")
+    public ResponseEntity<VagaResponse> adicionarMotoNaVaga(@PathVariable Long vagaId, @PathVariable Long motoId) {
+        VagaJava vaga = vagaService.readVagaById(vagaId);
+        var moto = motoService.readMotoById(motoId);
+        if (vaga == null || moto == null) return ResponseEntity.notFound().build();
+
+        boolean jaExiste = vaga.getMotos().stream().anyMatch(m -> m.getId().equals(motoId));
+        if (!jaExiste) {
+            vaga.getMotos().add(moto);
+            vagaService.updateVaga(vagaId, vaga);
+        }
+        return ResponseEntity.ok(vagaMapper.vagaToResponse(vaga));
+    }
+
+    @Operation(summary = "Remove a relação de uma moto com a vaga")
+    @DeleteMapping("/{vagaId}/motos/{motoId}")
+    public ResponseEntity<VagaResponse> removerMotoDaVaga(@PathVariable Long vagaId, @PathVariable Long motoId) {
+        VagaJava vaga = vagaService.readVagaById(vagaId);
+        if (vaga == null) return ResponseEntity.notFound().build();
+
+        boolean removed = vaga.getMotos().removeIf(m -> m.getId().equals(motoId));
+        if (removed) {
+            vagaService.updateVaga(vagaId, vaga);
+        }
+        return ResponseEntity.ok(vagaMapper.vagaToResponse(vaga));
     }
 }

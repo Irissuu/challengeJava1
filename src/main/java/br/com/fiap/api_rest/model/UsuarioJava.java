@@ -3,7 +3,7 @@ package br.com.fiap.api_rest.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "usuarios")
+@Table(name = "USUARIO_JAVA")
 public class UsuarioJava {
 
     @Id
@@ -19,8 +19,9 @@ public class UsuarioJava {
     private String senha;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "role")
-    private UserRole role;
+    @Column(nullable = false)
+    private UserRole role = UserRole.NONE;
+
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }

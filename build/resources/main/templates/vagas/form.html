@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Vagas – Formulário</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}"/>
+  <script defer th:src="@{/js/script.js}"></script>
+</head>
+
+<body th:with="page='vagas'">
+<div th:insert="fragments/header :: header"></div>
+
+<main class="container">
+  <h2>Vaga</h2>
+
+  <form id="vaga-form" onsubmit="submitVaga(event)">
+    <input id="vaga-id" type="hidden"/>
+
+    <div class="form-row">
+      <div>
+        <label for="vaga-status">Status</label>
+        <select id="vaga-status" class="input">
+          <option value="LIVRE">LIVRE</option>
+          <option value="OCUPADA">OCUPADA</option>
+          <option value="BLOQUEADA">BLOQUEADA</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="vaga-numero">Número</label>
+        <input id="vaga-numero" class="input" type="number" required min="1" placeholder="1"/>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div>
+        <label for="vaga-patio">Pátio</label>
+        <input id="vaga-patio" class="input" required placeholder="Bloco A"/>
+      </div>
+    </div>
+
+    <div class="stack-14"></div>
+    <button class="btn btn-primary" type="submit">Salvar</button>
+    <a class="btn btn-ghost ml-8" th:href="@{/vagas/list}">Cancelar</a>
+  </form>
+</main>
+
+<div th:insert="fragments/footer :: footer"></div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    if (document.getElementById("vaga-form") && typeof presetVagaIdHidden === "function") {
+      presetVagaIdHidden();
+    }
+  });
+</script>
+</body>
+</html>

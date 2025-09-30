@@ -32,11 +32,10 @@ public class UsuarioService {
         return usuarioRepository.existsByEmail(email);
     }
 
-    /** Usado pelo /auth/register */
     @Transactional
     public UsuarioJava create(String nome, String email, String senha, UserRole role) {
         if (role == null) {
-            throw new IllegalArgumentException("Informe a função: GERENCIA_VAGA ou GERENCIA_MOTO.");
+            role = UserRole.NONE;
         }
         if (existsByEmail(email)) {
             throw new IllegalStateException("Email já cadastrado");
@@ -49,20 +48,27 @@ public class UsuarioService {
         return usuarioRepository.save(u);
     }
 
-    /** Mantido para compatibilidade com código legado; sem default de role. */
     @Transactional
     @CachePut(value = "usuarios", key = "#result.id")
     public UsuarioJava createUsuario(UsuarioJava usuario) {
-        if (usuario.getEmail() == null || usuario.getSenha() == null) {
-            throw new IllegalArgumentException("Email e senha são obrigatórios");
+        if (usuario == null) {
+            throw new IllegalArgumentException("Payload do usuário é obrigatório");
         }
+        if (usuario.getEmail() == null || usuario.getEmail().trim().isEmpty()) {
+            throw new IllegalArgumentException("Email é obrigatório");
+        }
+        if (usuario.getSenha() == null || usuario.getSenha().trim().isEmpty()) {
+            throw new IllegalArgumentException("Senha é obrigatória");
+        }
+        final String emailNormalizado = usuario.getEmail().trim().toLowerCase(java.util.Locale.ROOT);
+        usuario.setEmail(emailNormalizado);
         if (usuario.getRole() == null) {
-            throw new IllegalArgumentException("Informe a função: GERENCIA_VAGA ou GERENCIA_MOTO.");
+            usuario.setRole(UserRole.NONE);
         }
-        if (existsByEmail(usuario.getEmail())) {
+        if (existsByEmail(emailNormalizado)) {
             throw new IllegalStateException("Email já cadastrado");
         }
-        usuario.setSenha(encodeIfNeeded(usuario.getSenha()));
+        usuario.setSenha(encodeIfNeeded(usuario.getSenha().trim()));
         return usuarioRepository.save(usuario);
     }
 
@@ -90,7 +96,6 @@ public class UsuarioService {
             usuario.setSenha(existente.get().getSenha());
         }
 
-        // Se não enviar role no update, preserva o atual (evita quebrar o login)
         if (usuario.getRole() == null) {
             usuario.setRole(existente.get().getRole());
         }

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Meu perfil</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <script defer th:src="@{/js/script.js}"></script>
+    <script defer th:src="@{/js/perfil.js}"></script>
+</head>
+<body th:with="page='perfil'">
+
+<div th:insert="fragments/header :: header"></div>
+
+<main id="profile-page" class="pf-wrap">
+    <div class="pf-card">
+        <div class="pf-panel readonly" id="pf-panel">
+
+            <div class="pf-grid">
+                <section>
+                    <h2 id="pf-display">Meu perfil</h2>
+                    <div class="pf-micro" id="pf-email-small"></div>
+                    <div class="pf-legend pf-show-when-readonly">
+                        Clique em <b>Editar dados</b> para alterar suas informações.
+                    </div>
+                    <div id="pf-msg" class="pf-msg"></div>
+                </section>
+
+                <section class="pf-info">
+                    <form id="pf-form" onsubmit="perSave(event)">
+                        <div class="pf-row">
+                            <div>
+                                <label for="pf-nome">Nome</label>
+                                <input id="pf-nome" class="input" placeholder="Seu nome" autocomplete="name">
+                            </div>
+                            <div>
+                                <label for="pf-email">E-mail</label>
+                                <input id="pf-email" class="input" type="email" placeholder="seu@email.com" autocomplete="email">
+                            </div>
+                        </div>
+
+                        <div class="pf-row pf-hide-when-readonly pf-row-gap">
+                            <div>
+                                <label for="pf-pass">Nova senha (opcional)</label>
+                                <input id="pf-pass" class="input" type="password" minlength="8"
+                                       placeholder="mín. 8 caracteres" autocomplete="new-password">
+                            </div>
+                            <div>
+                                <label for="pf-pass2">Confirmar nova senha</label>
+                                <input id="pf-pass2" class="input" type="password" minlength="8"
+                                       placeholder="repita a senha" autocomplete="new-password">
+                            </div>
+                        </div>
+
+                        <div class="pf-actions">
+                            <button type="button" class="btn btn-primary pf-show-when-readonly"
+                                    onclick="perToggleEdit(true)">Editar dados</button>
+                            <button type="submit" class="btn btn-primary pf-hide-when-readonly">Salvar</button>
+                            <button type="button" class="btn btn-ghost pf-hide-when-readonly"
+                                    onclick="perCancel()">Cancelar</button>
+                        </div>
+
+                        <div class="pf-danger">
+                            <button type="button" class="btn btn-danger"
+                                    onclick="perDeleteAccount()">Excluir minha conta</button>
+                        </div>
+                    </form>
+                </section>
+            </div>
+
+        </div>
+    </div>
+</main>
+
+</body>
+</html>

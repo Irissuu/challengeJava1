@@ -1,0 +1,20 @@
+<!DOCTYPE html><html lang="pt-br" xmlns:th="http://www.thymeleaf.org"><head>
+    <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Usuários</title><link rel="stylesheet" th:href="@{/css/style.css}"/><script defer th:src="@{/js/script.js}"></script>
+</head><body th:with="page='usuarios'">
+<div th:insert="fragments/header :: header"></div>
+<main class="container">
+    <div class="card">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
+            <h2 style="margin:0;">Usuários</h2>
+            <a class="btn btn-primary" th:href="@{/usuarios/form}">Novo usuário</a>
+        </div>
+        <table class="table">
+            <thead><tr><th>ID</th><th>Nome</th><th>E-mail</th><th>Perfis</th><th>Ações</th></tr></thead>
+            <tbody id="tbody-usuarios"></tbody>
+        </table>
+    </div>
+</main>
+<div th:insert="fragments/footer :: footer"></div>
+<script>document.addEventListener("DOMContentLoaded", loadUsuarios);</script>
+</body></html>

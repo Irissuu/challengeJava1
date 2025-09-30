@@ -9,6 +9,7 @@ import br.com.fiap.api_rest.service.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,6 +18,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.time.Duration;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
@@ -49,52 +52,50 @@ public class AuthController {
         }
     }
 
-    @Operation(summary = "Realiza login")
+    @Operation(summary = "Realiza login e grava cookie HttpOnly com o JWT")
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody AuthRequest body) {
+    public ResponseEntity<Map<String, String>> login(@RequestBody @Valid AuthRequest body) {
         Authentication auth = authManager.authenticate(
-                new UsernamePasswordAuthenticationToken(body.email(), body.senha()));
+                new UsernamePasswordAuthenticationToken(body.email(), body.senha())
+        );
+
         String jwt = tokenService.generate((UserDetails) auth.getPrincipal());
+
+        ResponseCookie cookie = ResponseCookie.from("jwt", jwt)
+                .httpOnly(true)
+                .secure(false)
+                .sameSite("Lax")
+                .path("/")
+                .maxAge(Duration.ofHours(8))
+                .build();
+
         return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, cookie.toString())
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwt)
-                .body(jwt);
+                .body(Map.of("token", jwt));
     }
 
-    @Operation(summary = "Realiza logout")
+    @Operation(summary = "Realiza logout (apaga o cookie)")
     @PostMapping("/logout")
-    public ResponseEntity<?> logout(
-            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization) {
-        if (authorization == null || !authorization.startsWith("Bearer ")) {
-            return ResponseEntity.badRequest()
-                    .body(java.util.Map.of("error", "Authorization header ausente ou inválido (use: Bearer <token>)."));
-        }
+    public ResponseEntity<?> logout(@CookieValue(value = "jwt", required = false) String token) {
+        // se quiser, pode revogar o token recebido
+        ResponseCookie clean = ResponseCookie.from("jwt", "")
+                .httpOnly(true).secure(false).sameSite("Lax").path("/").maxAge(0)
+                .build();
 
-        String token = authorization.substring(7).trim();
-        if (token.isEmpty()) {
-            return ResponseEntity.badRequest()
-                    .body(java.util.Map.of("error", "Token não informado."));
-        }
-
-        try {
-            tokenService.getSubject(token);
-
-            tokenService.revoke(token);
-
-            return ResponseEntity.ok(java.util.Map.of("message", "Logout realizado com sucesso."));
-        } catch (Exception ex) {
-            return ResponseEntity.status(org.springframework.http.HttpStatus.UNAUTHORIZED)
-                    .body(java.util.Map.of("error", "Token inválido ou expirado."));
-        }
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, clean.toString())
+                .body(Map.of("message", "Logout realizado com sucesso."));
     }
 
-@GetMapping("/me")
-public ResponseEntity<?> me(Authentication auth) {
-    if (auth == null) return ResponseEntity.status(401).build();
-    var user = auth.getName();
-    var roles = auth.getAuthorities().stream().map(a -> a.getAuthority()).toList();
-    return ResponseEntity.ok(new java.util.HashMap<>() {{
-        put("email", user);
-        put("roles", roles);
-    }});
-}
+    @Operation(summary = "Meus dados")
+    @GetMapping("/me")
+    public ResponseEntity<?> me(Authentication auth) {
+        if (auth == null) return ResponseEntity.status(401).build();
+        var roles = auth.getAuthorities().stream().map(a -> a.getAuthority()).toList();
+        return ResponseEntity.ok(Map.of(
+                "email", auth.getName(),
+                "roles", roles
+        ));
+    }
 }

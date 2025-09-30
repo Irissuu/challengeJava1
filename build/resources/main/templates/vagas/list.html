@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Vagas</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <script defer th:src="@{/js/script.js}"></script>
+
+</head>
+<body th:with="page='vagas'">
+<div th:insert="fragments/header :: header"></div>
+
+<main class="container">
+    <div class="card">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
+            <h2 style="margin:0;">Vagas</h2>
+            <a id="btn-nova-vaga" class="btn btn-primary" th:href="@{/vagas/form}">Nova vaga</a>
+        </div>
+
+        <table class="table" id="table-vagas">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Status</th>
+                <th>Número</th>
+                <th>Pátio</th>
+                <th data-col="acoes">Ações</th>
+            </tr>
+            </thead>
+            <tbody id="tbody-vagas"></tbody>
+        </table>
+    </div>
+</main>
+
+<div th:insert="fragments/footer :: footer"></div>
+
+<script>
+    function hasRole(me, roleName){
+        const target = String(roleName).toUpperCase();
+        const list = [];
+        if (me) {
+            if (me.role) list.push(String(me.role));
+            if (me.perfil) list.push(String(me.perfil));
+            if (me.papel) list.push(String(me.papel));
+            if (me.funcao) list.push(String(me.funcao));
+            if (Array.isArray(me.authorities)) {
+                me.authorities.forEach(a => list.push(a?.authority ?? a));
+            }
+        }
+        return list.map(s => String(s).toUpperCase())
+            .some(s => s.includes(target));
+    }
+
+    function stripVagaActionsForNonManagers(){
+        fetch("/usuarios/me", { credentials:"include", headers:{ "Accept":"application/json" }})
+            .then(r => r.ok ? r.json() : Promise.reject(r.status))
+            .then(me => {
+                const isVagaManager = hasRole(me, "GERENCIA_VAGA");
+                if (isVagaManager) return;
+
+                document.getElementById("btn-nova-vaga")?.remove();
+
+                document.querySelector('#table-vagas thead th[data-col="acoes"]')?.remove();
+
+                const tbody = document.getElementById("tbody-vagas");
+                const stripRow = (tr) => {
+                    if (!tr) return;
+                    tr.querySelectorAll("a,button").forEach(el => {
+                        const href = el.getAttribute("href") || "";
+                        const act = (el.dataset.action || "").toLowerCase();
+                        const isEdit = act.includes("edit") || act.includes("editar") || href.startsWith("/vagas/form");
+                        const isDelete = act.includes("exclu") || act.includes("delete") || href.includes("/vagas/delete");
+                        if (isEdit || isDelete) {
+                            const cell = el.closest("td,th");
+                            if (cell) cell.remove(); else el.remove();
+                        }
+                    });
+                };
+
+                Array.from(tbody.querySelectorAll("tr")).forEach(stripRow);
+
+                const obs = new MutationObserver(recs => {
+                    for (const rec of recs) {
+                        rec.addedNodes.forEach(node => {
+                            if (node.nodeType === 1 && node.tagName === "TR") stripRow(node);
+                        });
+                    }
+                });
+                obs.observe(tbody, { childList: true });
+            })
+            .catch(() => {  });
+    }
+
+    document.addEventListener("DOMContentLoaded", stripVagaActionsForNonManagers);
+</script>
+
+<script>document.addEventListener("DOMContentLoaded", loadVagas);</script>
+</body>
+</html>
