@@ -2,7 +2,7 @@
 
 API RESTful desenvolvida em **Java 17** com **Spring Boot** e **JPA**, conectada ao banco de dados **Oracle**. Esta API também permite execução em ambientes conteinerizados. Esta API faz parte do projeto **Elysia: Inteligência para Gestão Inteligente de Pátios**, com o objetivo de gerenciar de forma eficiente **motos** e **vagas de estacionamento** através de tecnologia inteligente.
 
-## ⟢ Integrantes
+## 👥 Integrantes
  
 - Iris Tavares Alves 557728 </br>
 - Taís Tavares Alves 557553 </br>
@@ -63,6 +63,8 @@ springdoc.swagger-ui.use-root-path=false
 ```text
 ./gradlew bootRun
 ```
+
+---
 
 ## 📅 Aplicação
 ### ▸ Tela Login
