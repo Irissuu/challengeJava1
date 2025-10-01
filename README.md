@@ -27,6 +27,7 @@ API RESTful desenvolvida em **Java 17** com **Spring Boot** e **JPA**, conectada
 - Thymeleaf
 - Flyway 
 
+---
 
 ### 1. Clone o repositório
 ```text
