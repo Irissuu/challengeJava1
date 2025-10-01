@@ -11,7 +11,7 @@ API RESTful desenvolvida em **Java 17** com **Spring Boot** e **JPA**, conectada
 
 ## 🎬 Vídeo
 
-> <a href="">Vídeo</a>
+> <a href="https://youtu.be/AcaJ8uVdZ8s?si=cYHkui6XZyS9VUBf">Vídeo</a>
 ---
 
 ## ⚙️ Tecnologias
@@ -62,3 +62,28 @@ springdoc.swagger-ui.use-root-path=false
 ```text
 ./gradlew bootRun
 ```
+
+## 📅 Aplicação
+### °❀⋆.ೃ࿔*:･ Tela Login
+<img width="1919" height="898" alt="image" src="https://github.com/user-attachments/assets/1bc1fe3e-f732-404f-9420-de1344570a00" />
+
+### °❀⋆.ೃ࿔*:･ Tela Cadastro
+<img width="1919" height="895" alt="image" src="https://github.com/user-attachments/assets/ded551b7-9534-4d27-a937-555a71869607" />
+
+### °❀⋆.ೃ࿔*:･ Tela Home
+<img width="1919" height="893" alt="image" src="https://github.com/user-attachments/assets/b549d4c6-4330-4d4b-9e4a-81310d1fc987" />
+
+### °❀⋆.ೃ࿔*:･ Tela Acesso Negado
+<img width="1916" height="900" alt="image" src="https://github.com/user-attachments/assets/9c7c77ab-1307-4c54-8d28-abc8a590c25c" />
+
+### °❀⋆.ೃ࿔*:･ Tela Listar Motos
+<img width="1919" height="898" alt="image" src="https://github.com/user-attachments/assets/5bd09d94-3237-4caa-bc57-e21d7281afb9" />
+
+### °❀⋆.ೃ࿔*:･ Tela Gerencia Vagas
+<img width="1919" height="902" alt="image" src="https://github.com/user-attachments/assets/f2f8d775-bb42-4c24-b2b7-fcfed6da18f1" />
+
+### °❀⋆.ೃ࿔*:･ Tela Perfil
+<img width="1915" height="889" alt="image" src="https://github.com/user-attachments/assets/b9508e5a-21db-4f5c-a796-17be375f6180" />
+
+
+
