@@ -1,6 +1,13 @@
 <h1> ElysiaAPI <img src="https://github.com/user-attachments/assets/bc6d687c-dd26-4bcd-bcbf-71a8a5681bc3" width="25"/> </h1>
 
-API RESTful desenvolvida em **Java 17** com **Spring Boot** e **JPA**, conectada ao banco de dados **Oracle**. Esta API também permite execução em ambientes conteinerizados. Esta API faz parte do projeto **Elysia: Inteligência para Gestão Inteligente de Pátios**, com o objetivo de gerenciar de forma eficiente **motos** e **vagas de estacionamento** através de tecnologia inteligente.
+<p><strong>ElysiaAPI</strong> é uma API RESTful em Java 17 com Spring Boot (JPA/Hibernate), conectada ao banco Oracle.
+As migrações de schema são controladas pelo Flyway.<br>
+A autenticação utiliza Spring Security + JWT e perfis de acesso
+GERENCIA_MOTO, GERENCIA_VAGA e NONE, garantindo CRUD apenas para quem tem permissão e visualização para os demais.</p>
+
+<p>Esta API faz parte do projeto <strong>Elysia</strong>: Inteligência para Gestão Inteligente de Pátios, com o objetivo de gerenciar de forma eficiente motos e vagas de estacionamento através de tecnologia inteligente.</p>
+
+---
 
 ## 👥 Integrantes
  
